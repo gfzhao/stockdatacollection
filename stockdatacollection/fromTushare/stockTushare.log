@@ -1,0 +1,6 @@
+INFO:sqlalchemy.engine.base.Engine:DESCRIBE `stock_xsg_data`
+INFO:sqlalchemy.engine.base.Engine:()
+INFO:sqlalchemy.engine.base.Engine:BEGIN (implicit)
+INFO:sqlalchemy.engine.base.Engine:INSERT INTO stock_xsg_data (date, code, count, ratio) VALUES (%s, %s, %s, %s)
+INFO:sqlalchemy.engine.base.Engine:(('2016-10-31', '002137', '0.50', '0.00'), ('2016-10-31', '002437', '2839.82', '1.29'), ('2016-10-31', '300170', '571.32', '0.66'), ('2016-10-30', '002429', '11.97', '0.01'), ('2016-10-30', '002560', '438.60', '1.02'), ('2016-10-30', '300403', '1240.50', '9.26'), ('2016-10-29', '000615', '111.42', '0.14'), ('2016-10-29', '002437', '161.29', '0.07')  ... displaying 10 of 65 total bound parameter sets ...  ('2016-10-10', '600599', '4000.00', '24.10'), ('2016-10-10', '600847', '1907.35', '12.44'))
+INFO:sqlalchemy.engine.base.Engine:COMMIT

@@ -1,0 +1,56 @@
+1. pandas dataframe 多主键实现
+   http://pandas.pydata.org/pandas-docs/stable/advanced.html
+   我的实现步骤:
+   1. 先用pd.MultiIndex.from_tuples生成一个多主键的对象
+      index = pd.MultiIndex.from_tuples
+      
+      In [1]: arrays = [['bar', 'bar', 'baz', 'baz', 'foo', 'foo', 'qux', 'qux'],
+         ...:           ['one', 'two', 'one', 'two', 'one', 'two', 'one', 'two']]
+         ...: 
+
+      In [2]: tuples = list(zip(*arrays))
+
+      In [3]: tuples
+      Out[3]: 
+      [('bar', 'one'),
+       ('bar', 'two'),
+       ('baz', 'one'),
+       ('baz', 'two'),
+       ('foo', 'one'),
+       ('foo', 'two'),
+       ('qux', 'one'),
+       ('qux', 'two')]
+
+      In [4]: index = pd.MultiIndex.from_tuples(tuples, names=['first', 'second'])
+      Out[5]: 
+      MultiIndex(levels=[[u'bar', u'baz', u'foo', u'qux'], [u'one', u'two']],
+                 labels=[[0, 0, 1, 1, 2, 2, 3, 3], [0, 1, 0, 1, 0, 1, 0, 1]],
+                 names=[u'first', u'second'])
+   2. 然后生成一个pd.Series，第一个输入是一个numpy的array对象
+      In [6]: s = pd.Series(np.random.randn(8), index=index)
+
+      In [7]: s
+      Out[7]: 
+      first  second
+      bar    one       0.469112
+             two      -0.282863
+      baz    one      -1.509059
+             two      -1.135632
+      foo    one       1.212112
+             two      -0.173215
+      qux    one       0.119209
+             two      -1.044236
+      dtype: float64
+   3. s.to_frame转换成一个dataFrame,
+      pd.Series只有一列，并且那个列名是一数字命名的，如果需要改成你需要的名字，用下面的函数完成，inplace表示在原dataFrame上修改
+      不copy
+      f.rename(index=str, columns={0: "open"},inplace=True)
+   4. 最后插入其他数据列就行了
+      f['high'] = high
+         f['close'] = close
+         f['low'] = low
+         f['volume'] = volume
+         f['amount'] = amount
+   5. 如果需要的话，可以调用下面的函数将数据写入数据库
+      f.to_sql('stock_daily_kt_data',StockHelper.engine,if_exists='append',
+                  index=True,index_label=['date','code'],dtype={'code':mysql.NVARCHAR(6),'date':mysql.DATE})
